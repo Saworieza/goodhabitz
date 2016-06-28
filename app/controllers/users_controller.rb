@@ -1,4 +1,8 @@
+require 'securerandom'
+
 class UsersController < ApplicationController
+  before_action :set_keys
+
   def new 
     @user = User.new 
   end   
@@ -14,39 +18,39 @@ class UsersController < ApplicationController
     # unique_slug = "/SLM_13592_O_Content/1"
     # host = uri + unique_slug
     # uri.scheme = 'https'
-    path = "https://apps.goodhabitz.com/lti/SLM_13592_O_Content/1"
+    path = "/lti/SLM_13592_O_Content/1"
 
     consumer = OAuth::Consumer.new(@consumer_key, @consumer_secret, { 
-      :site => path, 
+      :site => "https://apps.goodhabitz.com", 
       :signature_method => "HMAC-SHA1",
-      :oauth_callback => "about:blank",
+      # :oauth_callback => "about:blank",
        })
 
     options = { 
       :scheme => 'body'
     }
-    
-    @custom_params = {}
-    @custom_params[:lti_version] = "LTI-1p0"
-    @custom_params[:lti_message_type] = "basic-lti-launch-request"
-    @custom_params[:resource_link_id] = "randomstring88391-e1919-bb3456"
-    @custom_params[:user_id] = @user.user_id
+
+    custom_params = {}
+    custom_params[:lti_version] = "LTI-1p0"
+    custom_params[:lti_message_type] = "basic-lti-launch-request"
+    custom_params[:resource_link_id] = SecureRandom.uuid
+    custom_params[:user_id] = @user.user_id
+    custom_params[:oauth_callback] = "about:blank"
  
-    request = consumer.create_signed_request(:post, path, nil, options, params)
+    request = consumer.create_signed_request(:post, path, nil, options, custom_params)
       # the request is made by a html form in the user's browser, so we
       # want to revert the escapage and return the hash of post parameters ready
       # for embedding in a html view
-    hash = {}
+    @hash = {}
     request.body.split(/&/).each do |param|
       key, val = param.split('=').map { |v| CGI.unescape(v) }
-      hash[key] = val
+      @hash[key] = val
     end
 
-    redirect_to users_path
     puts "==================="
     puts @custom_params
     puts "==================="
-    puts hash 
+    puts @hash 
     puts "==================="
   end 
 

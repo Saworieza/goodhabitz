@@ -3,7 +3,7 @@
 
 <h3>Please enter your springest id</h3>
 
-<% custom_params.each do |key, value| %>
+<% @hash.each do |key, value| %>
   <%= hidden_field_tag :user %>
 
 <%= form_for @user , :method => :post  do |f| %>

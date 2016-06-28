@@ -1,0 +1,6 @@
+<form method="post" enctype="application/x-www-form-urlencoded" action="https://apps.goodhabitz.com/lti/SLM_13592_O_Content/1">
+  <% @hash.each do |key, value| %>
+    <%= hidden_field_tag key, value %>
+  <% end %>
+</form>
+<a href="#" onclick="document.getElementsByTagName('form')[0].submit();">Click Me!!!</a>
