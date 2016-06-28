@@ -16,3 +16,5 @@
 ### Re-direct to the good habitz course page 
 * form action sends action to an example course page URL 
 * redirect_to path at the end of the method 
+
+Note: this application won't work until you add your specific LTI consumer key and secrets into the secrets.yml file
