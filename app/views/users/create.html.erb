@@ -2,5 +2,7 @@
   <% @hash.each do |key, value| %>
     <%= hidden_field_tag key, value %>
   <% end %>
+
 </form>
+<!-- make this an onload method within the body tag -->
 <a href="#" onclick="document.getElementsByTagName('form')[0].submit();">Click Me!!!</a>

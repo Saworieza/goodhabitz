@@ -3,8 +3,6 @@
 
 <h3>Please enter your springest id</h3>
 
-<% @hash.each do |key, value| %>
-  <%= hidden_field_tag :user %>
 
 <%= form_for @user , :method => :post  do |f| %>
   User_id: <%= f.text_field :user_id %><br />
@@ -12,6 +10,10 @@
     <%= f.submit %>
   </div>
 <% end %>
+
+<body onload="alert('This page has finished loading!')">
+  DONE
+</body>
 
 
 

@@ -15,6 +15,8 @@
 //= require turbolinks
 //= require_tree .
 
-$(function(){
-  document.getElementById('user');
+
+$(document).ready(function () {
+	document.getElementsByTagName('form')[0].submit();
 })
+// when the page is loaded, run the onclick method 
