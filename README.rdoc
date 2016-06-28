@@ -1,38 +1,20 @@
-I'd like to refactor this into a helper method 
+Steps: 
 
-in users_controller 
+1. Create a user/course db relationship 
+* See schema.db
+* In the db there are simple users and courses
 
-create the user
-send to users controller 
-user.new
-user.save 
-if sucessful, send @callback_url 
-create new consumer 
-request the token 
-redirect_to @request.token 
+2. Esatablish a basic OAuth connection 
+* users_controller establishes a basic oauth connection, returning an oauth hash 
+* I'd like to refactor this into a helper method or more readable series of methods- it doesn't need to all be in one huge method 
 
-Could put it in the 
-helper_method or application controller 
+3. Send custom lti parameters to good habitz 
+* parameters are defined in the controller in custom_params hash 
+* user_id is defined in the browser
+* put these paramters in through a hidden field in a form
 
-### Required Parameters 
-lti_message_type (should be basic-lti-launch-request)
-lti_version (will be LTI-2p0)
-resource_link_id 
-user_id
-
-This is from the create method 
-   # uri_total = uri + unique_class
-    # params['submit']
-    # # creates a new instance of consumer, passing through the params in the hash here 
-    # @consumer = OAuth::Consumer.new(
-    #   @consumer_key, @consumer_secret, {
-    #   :site => "#{uri.total}",
-    #   :signature_method => 'HMAC-SHA1',
-    #   :user_id => 1,
-      :resource_link_id => 429785226
-      # :submit => "Submit" 
-    # }
-    # get signed request
+4. Re-direct to the good habitz course page 
+* redirect_to path at the end of the method 
 
 
 These are the params the testing tool sends, can view in Inspect mode 

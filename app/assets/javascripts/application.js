@@ -15,7 +15,6 @@
 //= require turbolinks
 //= require_tree .
 
-
 $(function(){
   document.getElementById('user');
 })
