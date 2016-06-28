@@ -1,4 +1,6 @@
-in a controller 
+I'd like to refactor this into a helper method 
+
+in users_controller 
 
 create the user
 send to users controller 
@@ -18,10 +20,20 @@ lti_version (will be LTI-2p0)
 resource_link_id 
 user_id
 
-In the rails console 
-@consumer = OAuth::Consumer.new("springest_-_testklant.1", "zvhFujzLrr", {site: "https://apps.goodhabitz.com/lti/SLM_13592_0_Content/1", lti_message_type: "basic-lti-launch-request", lti_version: "LTI-1p0", resource_link_id: 429785226, user_id: 1})
-callback_url = "http://127.0.0.1:3000/oauth/callback"
-@consumer.get_request_token(oauth_callback: callback_url)
+This is from the create method 
+   # uri_total = uri + unique_class
+    # params['submit']
+    # # creates a new instance of consumer, passing through the params in the hash here 
+    # @consumer = OAuth::Consumer.new(
+    #   @consumer_key, @consumer_secret, {
+    #   :site => "#{uri.total}",
+    #   :signature_method => 'HMAC-SHA1',
+    #   :user_id => 1,
+      :resource_link_id => 429785226
+      # :submit => "Submit" 
+    # }
+    # get signed request
+
 
 These are the params the testing tool sends, can view in Inspect mode 
 - inspect, network, find the post request, headers 

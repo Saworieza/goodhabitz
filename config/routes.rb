@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  root 'users#new'
   resources :users do
     collection do 
       get :oauth_callback_url

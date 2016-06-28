@@ -3,49 +3,68 @@ class UsersController < ApplicationController
     @user = User.new 
   end   
 
+  def set_keys
+    @consumer_key = "springest_-_testklant.1"
+    @consumer_secret = "zvhFujzLrr"
+    @launch_url = "https://apps.goodhabitz.com/lti"
+  end 
+
+  def has_required_params? 
+    @consumer_key && @consumer_secret && @launch_url && @resource_link_id
+  end 
+
   def create 
-    @user = User.new(user_params)
+    # raise "Don't have all your require params" unless has_required_params?
 
-    @callback_url = "http://127.0.0.1:3000/oauth/callback"
-    # creates a new instance of consumer, passing through the params in the hash here 
-    # maybe I should pass lti_consumer_key and lti_version through here? 
-    @consumer = OAuth::Consumer.new(
-      Rails.application.secrets.good_habitz_key,
-      Rails.application.secrets.good_habitz_secret, 
-      :http_method => :post, 
-      :site => "https://apps.goodhabitz.com/lti/SLM_13592_O_Content/1",
-      :lti_message_type => "basic-lti-launch-request",
-      # of course version should be 2, but test tool uses 1
-      :lti_version => "LTI-2p0",
-      :user_id => 1,
-      :resource_link_id => 429785226)
+    # should have lti parameters 
+    @lti_message_type = 'basic-lti-launch-request'
+    @lti_version = 'LTI-1p0'
 
+    # uri = URI.parse(@launch_url)
+    # unique_slug = "/SLM_13592_O_Content/1"
+    # host = uri + unique_slug
+    # uri.scheme = 'https'
+    path = "https://apps.goodhabitz.com/lti/SLM_13592_O_Content/1"
 
-    @request_token = @consumer.get_request_token(:oauth_callback => @callback_url)
-    
-    if @user.save 
-      session[:token] = @request_token.token
-      session[:token_secret] = @request_token.secret
-      # can't get the request token to authorize correctly 
-      puts "==============================="
-      puts @request_token.authorize_url
-      puts "==============================="
-      # redirect_to request_token.authorize_url(:oauth_callback => @callback_url)
-      # should go to their site, then back to ours 
+    consumer = OAuth::Consumer.new(@consumer_key, @consumer_secret, { 
+      :site => "https://apps.goodhabitz.com/lti/SLM_13592_O_Content/1", 
+      :signature_method => "HMAC-SHA1",
+       })
 
-    else 
-      render :new
+    options = { 
+      :scheme => 'body'
+    }
+
+    params['lti_version'] ||= "LTI-1p0"
+
+    request = consumer.create_signed_request(:post, path, nil, options, params)
+
+      # the request is made by a html form in the user's browser, so we
+      # want to revert the escapage and return the hash of post parameters ready
+      # for embedding in a html view
+    hash = {}
+    request.body.split(/&/).each do |param|
+      key, val = param.split('/=/').map { |v| CGI.unescape(v) }
+      hash[key] = val
     end
+    puts hash
+
+    redirect_to users_path
   end 
 
   def oauth_callback_url
+    # when you return with access_token 
+    # save session token with code in oauth ruby 
+    # render our tool/data inside their learning environment 
     print "Succesful handshake"
   end
+  def index
+  end 
 
   private 
 
   def user_params 
-    params.require(:user).permit(:name)
+    params.require(:user).permit(:name, :user_id)
   end 
 end 
 

@@ -1,8 +1,13 @@
+<!-- find me in users/new -->
 <h1>Sign up to use the LTI tool</h1>
 
-    <h3>Please enter your springest id</h3>
+<h3>Please enter your springest id</h3>
 
-    <%= form_for @user do |f| %>
-      Name: <%= f.text_field :name %><br />
-     <%= f.submit %>
-    <% end %>
+<%= form_for @user , :method => :post  do |f| %>
+  User_id: <%= f.text_field :user_id %><br />
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+<!-- JS hidden values from form.js -->
